@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Moviecard from "../components/Moviecard";
-import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 function Favorites() {
@@ -13,7 +13,7 @@ function Favorites() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Header />
+            <Navbar />
             <div className="flex-grow p-4">
                 <h1 className="text-3xl font-bold mb-6">❤️ Favorite Movies</h1>
                 {favorites.length === 0 ? (

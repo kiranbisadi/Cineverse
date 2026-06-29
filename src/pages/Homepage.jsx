@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getPopularMovies, searchMovies } from "../services/tmdb";
 import Moviecard from "../components/Moviecard";
-import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 function Homepage() {
@@ -46,7 +46,7 @@ function Homepage() {
     }
     return (
         <div className="min-h-screen flex flex-col">
-            <Header
+            <Navbar
                 search={search}
                 setSearch={setSearch}
                 goHome={goHome}
