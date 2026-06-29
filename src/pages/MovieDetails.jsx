@@ -1,35 +1,34 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getMovieById } from "../services/tmdb";
+import { getMovieById, getMovieCast } from "../services/tmdb";
+import Loader from "../components/Loader";
 
 function MovieDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
 
     const [movie, setMovie] = useState(null);
+    const [cast, setCast] = useState([]);
 
     useEffect(() => {
         async function fetchMovie() {
             const data = await getMovieById(id);
             setMovie(data);
+
+            const castData = await getMovieCast(id);
+            setCast(castData);
         }
 
         fetchMovie();
     }, [id]);
 
-    if (!movie) {
-        return (
-            <h2 className="text-center text-2xl mt-10">
-                Loading...
-            </h2>
-        );
-    }
+    if (!movie) return <Loader />;
 
     const {
         title, poster_path, backdrop_path, tagline, vote_average,
         vote_count, release_date, runtime, popularity, genres,
         production_companies, budget, revenue, overview,
-        original_language, status} = movie;
+        original_language, status } = movie;
 
     return (
         <div className="bg-gray-900 min-h-screen text-white">
@@ -51,11 +50,13 @@ function MovieDetails() {
             </div>
 
             <div className="max-w-7xl mx-auto px-8 py-10 flex flex-col md:flex-row gap-10">
-                <img
-                    src={`https://image.tmdb.org/t/p/w500${poster_path}`}
-                    alt={title}
-                    className="w-72 rounded-lg shadow-2xl"
-                />
+                <div className="self-start sticky top-6">
+                    <img
+                        src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+                        alt={title}
+                        className="w-72 rounded-lg shadow-2xl"
+                    />
+                </div>
                 <div className="flex-1">
 
                     <h1 className="text-5xl font-bold mb-2">
@@ -119,7 +120,7 @@ function MovieDetails() {
                                 : "N/A"}
                         </p>
                     </div>
-                    
+
                     <div className="mt-8">
                         <h2 className="text-3xl font-semibold mb-3">
                             Overview
@@ -128,6 +129,37 @@ function MovieDetails() {
                         <p className="text-gray-300 leading-8">
                             {overview}
                         </p>
+                    </div>
+                    <div className="mt-10">
+                        <h2 className="text-3xl font-semibold mb-4">
+                            Cast
+                        </h2>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            {cast.slice(0, 12).map((actor) => (
+                                <div key={actor.id} className="text-center">
+
+                                    <img
+                                        src={
+                                            actor.profile_path
+                                                ? `https://image.tmdb.org/t/p/w200${actor.profile_path}`
+                                                : "https://via.placeholder.com/200x300?text=No+Image"
+                                        }
+                                        alt={actor.name}
+                                        className="rounded-lg w-full"
+                                    />
+
+                                    <h3 className="mt-2 font-semibold">
+                                        {actor.name}
+                                    </h3>
+
+                                    <p className="text-gray-400 text-sm">
+                                        {actor.character}
+                                    </p>
+
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                 </div>

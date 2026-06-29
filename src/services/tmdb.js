@@ -45,3 +45,16 @@ export const searchMovies = async (query) => {
         return[];
     }
 };
+export const getMovieCast = async (id) => {
+    try {
+        const response = await axios.get(
+            `${Base_URL}/movie/${id}/credits`,
+            options
+        );
+
+        return response.data.cast;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};
